@@ -26,6 +26,7 @@ Use Docker registry with *latest* tag:
 $ docker pull tracer0tong/android-emulator:latest
 ```
 Or use Makefile from repository:
+
 ```sh
 $ git clone https://github.com/tracer0tong/android-emulator.git android-emulator
 $ cd android-emulator
