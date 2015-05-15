@@ -6,6 +6,15 @@ FROM toopher/ubuntu-i386:12.04
 
 MAINTAINER tracer0tong <yuriy.leonychev@gmail.com>
 
+# Specially for SSH access and port redirection
+ENV ROOTPASSWORD android
+
+# Expose ADB, ADB control and VNC ports
+EXPOSE 22
+EXPOSE 5554
+EXPOSE 5555
+EXPOSE 5900
+
 ENV DEBIAN_FRONTEND noninteractive
 RUN echo "debconf shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections
 RUN echo "debconf shared/accepted-oracle-license-v1-1 seen true" | debconf-set-selections
@@ -13,8 +22,8 @@ RUN echo "debconf shared/accepted-oracle-license-v1-1 seen true" | debconf-set-s
 # Update packages
 RUN apt-get -y update
 
-# First, install add-apt-repository and bzip2
-RUN apt-get -y install python-software-properties bzip2
+# First, install add-apt-repository, sshd and bzip2
+RUN apt-get -y install python-software-properties bzip2 ssh
 
 # Add oracle-jdk7 to repositories
 RUN add-apt-repository ppa:webupd8team/java
@@ -56,7 +65,7 @@ RUN cd /; rm android-sdk_r23-linux.tgz && rm apache-ant-1.8.4-bin.tar.gz
 # Some preparation before update
 RUN chown -R root:root /usr/local/android-sdk/
 
-# Install latest android tools and system image.
+# Install latest android tools and system images
 RUN echo "y" | android update sdk --filter tools --no-ui --force
 RUN echo "y" | android update sdk --filter platform-tools --no-ui --force
 RUN echo "y" | android update sdk --filter platform --no-ui --force
@@ -77,3 +86,19 @@ RUN adb start-server
 RUN mkdir /usr/local/android-sdk/tools/keymaps
 RUN touch /usr/local/android-sdk/tools/keymaps/en-us
 
+# Run sshd
+RUN apt-get update && apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
+RUN echo "root:$ROOTPASSWORD" | chpasswd
+RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+
+ENV NOTVISIBLE "in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
+
+# Add entrypoint 
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+CMD /entrypoint.sh
