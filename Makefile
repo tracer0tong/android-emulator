@@ -21,7 +21,8 @@ ports:
 ifneq "$(RUNNED)" ""
 	$(eval ADBPORT := $(shell docker port $(ALIAS) | grep '5555/tcp' | awk -F '\:' '{print($$2)}'))
 	@echo -e "Use:\n adb kill-server\n adb connect $(IP1):$(ADBPORT)"
-        ifdef IP1
+	@echo -e "or\n adb connect 0.0.0.0:$(ADBPORT)"
+        ifdef IP
 		@echo -e "or\n adb connect $(IP):$(ADBPORT)\n"
         endif
 else
