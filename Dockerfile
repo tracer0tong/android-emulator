@@ -87,7 +87,7 @@ RUN mkdir /usr/local/android-sdk/tools/keymaps
 RUN touch /usr/local/android-sdk/tools/keymaps/en-us
 
 # Run sshd
-RUN apt-get update && apt-get install -y openssh-server
+RUN apt-get install -y openssh-server
 RUN mkdir /var/run/sshd
 RUN echo "root:$ROOTPASSWORD" | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
@@ -97,6 +97,9 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
+
+# Install socat
+RUN apt-get install -y socat
 
 # Add entrypoint 
 ADD entrypoint.sh /entrypoint.sh

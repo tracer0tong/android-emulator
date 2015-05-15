@@ -14,7 +14,9 @@ fwd_adb_ports_b2d:
 
 clean:
 	docker ps -a -q | xargs -n 1 -I {} docker rm {}
-	docker rmi -f $$( docker images | grep "<none>" | awk '{print($$3)}' )
+	list=$$( docker images | grep "<none>" | awk '{print($$3)}' )
+	echo $$list
+	if [ -n "$$list" ]; then docker rmi -f $$list; fi
 
 kill:
 	docker kill android
