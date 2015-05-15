@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 ALIAS = "android"
 EXISTS := $(shell docker ps -a -q -f name=$(ALIAS))
 RUNNED := $(shell docker ps -q -f name=$(ALIAS))
@@ -19,9 +20,9 @@ run: clean
 ports:
 ifneq "$(RUNNED)" ""
 	$(eval ADBPORT := $(shell docker port $(ALIAS) | grep '5555/tcp' | awk -F '\:' '{print($$2)}'))
-	@echo "Use:\n adb kill-server\n adb connect $(IP):$(ADBPORT)"
+	@echo -e "Use:\n adb kill-server\n adb connect $(IP1):$(ADBPORT)"
         ifdef IP1
-		@echo "or\n adb connect $(IP1):$(ADBPORT)\n"
+		@echo -e "or\n adb connect $(IP):$(ADBPORT)\n"
         endif
 else
 	@echo "Run container"
