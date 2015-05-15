@@ -35,9 +35,11 @@ $ make run
 $ make ports
 Use:
  adb kill-server
- adb connect 192.168.59.103:33057
+ adb connect 172.17.1.88:33069
 or
- adb connect 172.17.1.85:33057
+ adb connect 0.0.0.0:33069
+or
+ adb connect 192.168.59.103:33069
 ```
 
 Additional Makefile targets:
