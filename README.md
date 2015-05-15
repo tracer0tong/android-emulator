@@ -1,6 +1,7 @@
 # Android-emulator
 
-Android-emulator is yet another Docker image with Android SDK and emulator inside.
+Android-emulator is yet another Docker image with Android SDK and emulator inside (based on tons of other works).
+
 My aims:
 
   - Make stable and reliable Docker container
@@ -10,7 +11,7 @@ My aims:
 Docker image avalaible from [Docker registry].
 
 ### Version
-0.0.1
+0.0.2
 
 ### Tech
 
@@ -31,6 +32,15 @@ Or use Makefile from repository:
 $ git clone https://github.com/tracer0tong/android-emulator.git android-emulator
 $ cd android-emulator
 $ make run
+```
+
+Additional Makefile targets:
+
+```sh
+$ make kill
+$ make ps
+$ make ports
+$ make clean
 ```
 
 ### Todo's
