@@ -32,6 +32,12 @@ Or use Makefile from repository:
 $ git clone https://github.com/tracer0tong/android-emulator.git android-emulator
 $ cd android-emulator
 $ make run
+$ make ports
+Use:
+ adb kill-server
+ adb connect 192.168.59.103:33057
+or
+ adb connect 172.17.1.85:33057
 ```
 
 Additional Makefile targets:
