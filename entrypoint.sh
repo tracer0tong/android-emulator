@@ -19,17 +19,21 @@ case $key in
 esac
 shift
 done
-echo EMULATOR  = "${EMULATOR}"
+echo EMULATOR  = "Requested API: ${EMULATOR} emulator."
 #echo "Number files in SEARCH PATH with EXTENSION:" $(ls -1 "${SEARCHPATH}"/*."${EXTENSION}" | wc -l)
 if [[ -n $1 ]]; then
     echo "Last line of file specified as non-opt/last argument:"
     tail -1 $1
 fi
 
+# Run sshd
+/usr/sbin/sshd
 
+# Detect ip and forward ADB ports outside to outside interface
 ip=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
 socat tcp-listen:5554,bind=$ip,fork tcp:127.0.0.1:5554 &
 socat tcp-listen:5555,bind=$ip,fork tcp:127.0.0.1:5555 &
+
 # Set up and run emulator
-echo "n" | android create avd -f -n test -t android-19
+echo "n" | android create avd -f -n test -t ${EMULATOR}
 /usr/local/android-sdk/tools/emulator-x86 -avd test -noaudio -no-window -gpu off -verbose -qemu -usbdevice tablet -vnc :0

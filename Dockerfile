@@ -83,8 +83,17 @@ RUN adb start-server
 RUN mkdir /usr/local/android-sdk/tools/keymaps
 RUN touch /usr/local/android-sdk/tools/keymaps/en-us
 
-# Define root password
+# Run sshd
+RUN apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
 RUN echo "root:$ROOTPASSWORD" | chpasswd
+RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+
+ENV NOTVISIBLE "in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
 
 # Install socat
 RUN apt-get install -y socat
@@ -92,4 +101,5 @@ RUN apt-get install -y socat
 # Add entrypoint 
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-ENTRYPOINT /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["-e","android-19"]
