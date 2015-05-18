@@ -73,6 +73,7 @@ RUN echo "y" | android update sdk --filter build-tools-21.0.1 --no-ui -a
 RUN echo "y" | android update sdk --filter sys-img-x86-android-18 --no-ui -a
 RUN echo "y" | android update sdk --filter sys-img-x86-android-19 --no-ui -a
 RUN echo "y" | android update sdk --filter sys-img-x86-android-21 --no-ui -a
+RUN echo "y" | android update sdk --filter sys-img-x86-android-22 --no-ui -a
 
 # Update ADB
 RUN echo "y" | android update adb
