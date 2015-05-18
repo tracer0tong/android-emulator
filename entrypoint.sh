@@ -1,6 +1,32 @@
 #!/bin/bash
 
-/usr/sbin/sshd
+while [[ $# > 1 ]]
+do
+key="$1"
+
+case $key in
+    -e|--emulator)
+    EMULATOR="$2"
+    shift
+    ;;
+    --default)
+    DEFAULT=YES
+    shift
+    ;;
+    *)
+    echo "Use \"-e android-19\" to start Android emulator for API19\n"
+    ;;
+esac
+shift
+done
+echo EMULATOR  = "${EMULATOR}"
+#echo "Number files in SEARCH PATH with EXTENSION:" $(ls -1 "${SEARCHPATH}"/*."${EXTENSION}" | wc -l)
+if [[ -n $1 ]]; then
+    echo "Last line of file specified as non-opt/last argument:"
+    tail -1 $1
+fi
+
+
 ip=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
 socat tcp-listen:5554,bind=$ip,fork tcp:127.0.0.1:5554 &
 socat tcp-listen:5555,bind=$ip,fork tcp:127.0.0.1:5555 &
