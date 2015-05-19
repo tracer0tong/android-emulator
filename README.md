@@ -42,7 +42,7 @@ or
 or
  adb connect 192.168.59.103:33069
 ```
-By default it will create and run API 19 (x86) for you, but some other versions also supported. You can run emulator for API versions: 10, 18, 19, 21, 22. This is the most popular API versions among usable devices.
+By default it will create and run API 19 (x86) for you, but some other versions also supported. You can run emulator for API versions: 10, 18, 19, 21, 22. This is the [most popular] API versions among usable devices.
 
 ```sh
 $ make EMULATOR="android-10" run
@@ -77,5 +77,6 @@ Apache
 [Docker]:https://www.docker.com
 [Android SDK]:https://developer.android.com/sdk/index.html
 [Apache Ant]:http://ant.apache.org
+[most popular]:https://developer.android.com/about/dashboards/index.html?utm_source=suzunone
 
 
