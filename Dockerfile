@@ -69,7 +69,8 @@ RUN chown -R root:root /usr/local/android-sdk/
 RUN echo "y" | android update sdk --filter tools --no-ui --force
 RUN echo "y" | android update sdk --filter platform-tools --no-ui --force
 RUN echo "y" | android update sdk --filter platform --no-ui --force
-RUN echo "y" | android update sdk --filter build-tools-21.0.1 --no-ui -a
+RUN echo "y" | android update sdk --filter build-tools-22.0.1 --no-ui -a
+RUN echo "y" | android update sdk --filter sys-img-x86-android-10 --no-ui -a
 RUN echo "y" | android update sdk --filter sys-img-x86-android-18 --no-ui -a
 RUN echo "y" | android update sdk --filter sys-img-x86-android-19 --no-ui -a
 RUN echo "y" | android update sdk --filter sys-img-x86-android-21 --no-ui -a

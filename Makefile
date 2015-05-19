@@ -7,6 +7,7 @@ ifneq "$(RUNNED)" ""
 IP1 := $(shell docker inspect $(ALIAS) | grep "IPAddress" | cut -d '"' -f 4)
 endif
 STALE_IMAGES := $(shell docker images | grep "<none>" | awk '{print($$3)}')
+EMULATOR ?= "android-19"
 
 .PHONY = run ports kill ps
 
@@ -15,7 +16,7 @@ all:
 	@docker images
 
 run: clean
-	@docker run -d -P --name android --log-driver=json-file tracer0tong/android-emulator -e android-19
+	@docker run -d -P --name android --log-driver=json-file tracer0tong/android-emulator -e $(EMULATOR)
 
 ports:
 ifneq "$(RUNNED)" ""
