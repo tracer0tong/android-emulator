@@ -11,7 +11,7 @@ My aims:
 Docker image avalaible from [Docker registry].
 
 ### Version
-0.0.2
+0.0.3
 
 ### Tech
 
@@ -35,12 +35,21 @@ $ cd android-emulator
 $ make run
 $ make ports
 Use:
- adb kill-server
- adb connect 172.17.1.88:33069
+adb kill-server
+adb connect 172.17.0.2:32769
 or
- adb connect 0.0.0.0:33069
-or
- adb connect 192.168.59.103:33069
+adb connect 0.0.0.0:32769
+$ adb kill-server
+$ adb connect 0.0.0.0:32769
+* daemon not running. starting it now on port 5037 *
+* daemon started successfully *
+connected to 0.0.0.0:32769
+$ adb devices
+List of devices attached
+0.0.0.0:32769   device
+
+$ adb shell
+root@generic_x86:/ #
 ```
 By default it will create and run API 19 (x86) for you, but some other versions also supported. You can run emulator for API versions: 10, 18, 19, 21, 22. This is the [most popular] API versions among usable devices.
 
