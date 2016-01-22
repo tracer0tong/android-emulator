@@ -2,12 +2,13 @@ SHELL := /bin/bash
 ALIAS = "android"
 EXISTS := $(shell docker ps -a -q -f name=$(ALIAS))
 RUNNED := $(shell docker ps -q -f name=$(ALIAS))
-IP := $(shell boot2docker ip)
 ifneq "$(RUNNED)" ""
-IP1 := $(shell docker inspect $(ALIAS) | grep "IPAddress" | cut -d '"' -f 4)
+IP := $(shell docker inspect $(ALIAS) | grep "IPAddress\"" | head -n1 | cut -d '"' -f 4)
 endif
 STALE_IMAGES := $(shell docker images | grep "<none>" | awk '{print($$3)}')
 EMULATOR ?= "android-19"
+
+COLON := :
 
 .PHONY = run ports kill ps
 
@@ -20,12 +21,9 @@ run: clean
 
 ports:
 ifneq "$(RUNNED)" ""
-	$(eval ADBPORT := $(shell docker port $(ALIAS) | grep '5555/tcp' | awk -F '\:' '{print($$2)}'))
-	@echo -e "Use:\n adb kill-server\n adb connect $(IP1):$(ADBPORT)"
+	$(eval ADBPORT := $(shell docker port $(ALIAS) | grep '5555/tcp' | awk '{split($$3,a,"$(COLON)");print a[2]}'))
+	@echo -e "Use:\n adb kill-server\n adb connect $(IP):$(ADBPORT)"
 	@echo -e "or\n adb connect 0.0.0.0:$(ADBPORT)"
-        ifdef IP
-		@echo -e "or\n adb connect $(IP):$(ADBPORT)\n"
-        endif
 else
 	@echo "Run container"
 endif

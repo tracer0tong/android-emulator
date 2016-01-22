@@ -28,12 +28,14 @@ fi
 
 # Run sshd
 /usr/sbin/sshd
+adb start-server
 
 # Detect ip and forward ADB ports outside to outside interface
 ip=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
+socat tcp-listen:5037,bind=$ip,fork tcp:127.0.0.1:5037 &
 socat tcp-listen:5554,bind=$ip,fork tcp:127.0.0.1:5554 &
 socat tcp-listen:5555,bind=$ip,fork tcp:127.0.0.1:5555 &
 
 # Set up and run emulator
-echo "n" | /usr/local/android-sdk/tools/android create avd -f -n test -t ${EMULATOR} --abi default/x86
-/usr/local/android-sdk/tools/emulator-x86 -avd test -noaudio -no-window -gpu off -verbose -qemu -usbdevice tablet -vnc :0
+echo "no" | /usr/local/android-sdk/tools/android create avd -f -n test -t ${EMULATOR} --abi default/x86
+echo "no" | /usr/local/android-sdk/tools/emulator64-x86 -avd test -noaudio -no-window -gpu off -verbose -qemu -usbdevice tablet -vnc :0
