@@ -51,14 +51,14 @@ List of devices attached
 $ adb shell
 root@generic_x86:/ #
 ```
-By default it will create and run API 19 (x86) for you, but some other versions also supported. You can run emulator for API versions: 10, 18, 19, 21, 22. This is the [most popular] API versions among usable devices.
+By default it will create and run API 19 (arm) for you, but some other versions also supported. You can run emulator for API versions: 19, 21, 22 x86/armeabi-v7a (as -a option). This is the [most popular] API versions among usable devices.
 
 ```sh
-$ make EMULATOR="android-10" run
+$ make EMULATOR="android-22" ARCH="x86" run
 ```
 or
 ```sh
-$ docker run -d -P --name android tracer0tong/android-emulator -e "android-10"
+$ docker run -d -P --name android tracer0tong/android-emulator -e "android-22" -a "x86"
 ```
 
 Additional Makefile targets:
