@@ -11,11 +11,7 @@ My aims:
 Docker image avalaible from [Docker registry].
 
 ### Version
-<<<<<<< HEAD
-0.0.3
-=======
 0.0.4
->>>>>>> issue_5
 
 ### Tech
 

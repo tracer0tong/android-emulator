@@ -1,9 +1,5 @@
 # Android development environment for ubuntu precise (12.04 LTS) (i386).
-<<<<<<< HEAD
-# version 0.0.3
-=======
 # version 0.0.4
->>>>>>> issue_5
 
 # Start with ubuntu 12.04 (i386).
 FROM ubuntu:12.04
