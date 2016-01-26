@@ -40,5 +40,12 @@ socat tcp-listen:5554,bind=$ip,fork tcp:127.0.0.1:5554 &
 socat tcp-listen:5555,bind=$ip,fork tcp:127.0.0.1:5555 &
 
 # Set up and run emulator
+if [[ $ARCH == *"x86"* ]]
+then 
+    EMU="x86"
+else
+    EMU="arm"
+fi
+
 echo "no" | /usr/local/android-sdk/tools/android create avd -f -n test -t ${EMULATOR} --abi default/${ARCH}
-echo "no" | /usr/local/android-sdk/tools/emulator64-x86 -avd test -noaudio -no-window -gpu off -verbose -qemu -usbdevice tablet -vnc :0
+echo "no" | /usr/local/android-sdk/tools/emulator64-${EMU} -avd test -noaudio -no-window -gpu off -verbose -qemu -usbdevice tablet -vnc :0
