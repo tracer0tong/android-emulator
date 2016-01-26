@@ -9,18 +9,21 @@ case $key in
     EMULATOR="$2"
     shift
     ;;
+    -a|--arch)
+    ARCH="$2"
+    shift
+    ;;
     --default)
     DEFAULT=YES
     shift
     ;;
     *)
-    echo "Use \"-e android-19\" to start Android emulator for API19\n"
+    echo "Use \"-e android-19 -a x86\" to start Android emulator for API19 on X86 architecture.\n"
     ;;
 esac
 shift
 done
-echo EMULATOR  = "Requested API: ${EMULATOR} emulator."
-#echo "Number files in SEARCH PATH with EXTENSION:" $(ls -1 "${SEARCHPATH}"/*."${EXTENSION}" | wc -l)
+echo EMULATOR  = "Requested API: ${EMULATOR} (${ARCH}) emulator."
 if [[ -n $1 ]]; then
     echo "Last line of file specified as non-opt/last argument:"
     tail -1 $1
@@ -37,5 +40,12 @@ socat tcp-listen:5554,bind=$ip,fork tcp:127.0.0.1:5554 &
 socat tcp-listen:5555,bind=$ip,fork tcp:127.0.0.1:5555 &
 
 # Set up and run emulator
-echo "no" | /usr/local/android-sdk/tools/android create avd -f -n test -t ${EMULATOR} --abi default/x86
-echo "no" | /usr/local/android-sdk/tools/emulator64-x86 -avd test -noaudio -no-window -gpu off -verbose -qemu -usbdevice tablet -vnc :0
+if [[ $ARCH == *"x86"* ]]
+then 
+    EMU="x86"
+else
+    EMU="arm"
+fi
+
+echo "no" | /usr/local/android-sdk/tools/android create avd -f -n test -t ${EMULATOR} --abi default/${ARCH}
+echo "no" | /usr/local/android-sdk/tools/emulator64-${EMU} -avd test -noaudio -no-window -gpu off -verbose -qemu -usbdevice tablet -vnc :0

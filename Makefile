@@ -7,6 +7,7 @@ IP := $(shell docker inspect $(ALIAS) | grep "IPAddress\"" | head -n1 | cut -d '
 endif
 STALE_IMAGES := $(shell docker images | grep "<none>" | awk '{print($$3)}')
 EMULATOR ?= "android-19"
+ARCH ?= "armeabi-v7a"
 
 COLON := :
 
@@ -17,7 +18,7 @@ all:
 	@docker images
 
 run: clean
-	@docker run -d -P --name android --log-driver=json-file tracer0tong/android-emulator -e $(EMULATOR)
+	@docker run -d -P --name android --log-driver=json-file tracer0tong/android-emulator -e $(EMULATOR) -a $(ARCH)
 
 ports:
 ifneq "$(RUNNED)" ""
