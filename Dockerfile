@@ -103,4 +103,3 @@ RUN apt-get install -y socat
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["-e","android-19","-a","armeabi-v7a"]

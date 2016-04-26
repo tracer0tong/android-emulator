@@ -1,28 +1,14 @@
 #!/bin/bash
 
-while [[ $# > 1 ]]
-do
-key="$1"
+if [[ $EMULATOR == "" ]]; then
+    EMULATOR="android-19"
+    echo "Using default emulator $EMULATOR"
+fi
 
-case $key in
-    -e|--emulator)
-    EMULATOR="$2"
-    shift
-    ;;
-    -a|--arch)
-    ARCH="$2"
-    shift
-    ;;
-    --default)
-    DEFAULT=YES
-    shift
-    ;;
-    *)
-    echo "Use \"-e android-19 -a x86\" to start Android emulator for API19 on X86 architecture.\n"
-    ;;
-esac
-shift
-done
+if [[ $ARCH == "" ]]; then
+    ARCH="x86"
+    echo "Using default arch $ARCH"
+fi
 echo EMULATOR  = "Requested API: ${EMULATOR} (${ARCH}) emulator."
 if [[ -n $1 ]]; then
     echo "Last line of file specified as non-opt/last argument:"
