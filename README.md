@@ -58,7 +58,7 @@ $ make EMULATOR="android-22" ARCH="x86" run
 ```
 or
 ```sh
-$ docker run -d -P --name android tracer0tong/android-emulator -e "android-22" -a "x86"
+$ docker run -e "EMULATOR=android-22" -e "ARCH=x86" -d -P --name android tracer0tong/android-emulator
 ```
 
 ### How to connect to emulator
