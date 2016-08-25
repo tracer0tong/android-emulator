@@ -1,8 +1,7 @@
-# Android development environment for ubuntu precise (12.04 LTS) (i386).
+# Android development environment for ubuntu.
 # version 0.0.4
 
-# Start with ubuntu 12.04 (i386).
-FROM ubuntu:12.04
+FROM ubuntu
 
 MAINTAINER tracer0tong <yuriy.leonychev@gmail.com>
 
@@ -24,13 +23,10 @@ RUN echo "debconf shared/accepted-oracle-license-v1-1 seen true" | debconf-set-s
 RUN apt-get -y update
 
 # First, install add-apt-repository, sshd and bzip2
-RUN apt-get -y install python-software-properties bzip2 ssh net-tools
+RUN apt-get -y install software-properties-common bzip2 ssh net-tools
 
 # Add oracle-jdk7 to repositories
 RUN add-apt-repository ppa:webupd8team/java
-
-# Make sure the package repository is up to date
-RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 
 # Update apt
 RUN apt-get update
