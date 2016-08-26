@@ -1,5 +1,5 @@
 # Android development environment for ubuntu.
-# version 0.0.4
+# version 0.0.5
 
 FROM ubuntu
 
