@@ -1,5 +1,7 @@
 # Android-emulator
 
+Thanks to @nightscape for nice optimizations!
+
 Android-emulator is yet another Docker image with Android SDK and emulator inside (based on tons of other works).
 
 My aims:
@@ -11,7 +13,7 @@ My aims:
 Docker image avalaible from [Docker registry].
 
 ### Version
-0.0.4
+0.0.5
 
 ### Tech
 
