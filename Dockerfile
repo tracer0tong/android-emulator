@@ -16,33 +16,27 @@ EXPOSE 5555
 EXPOSE 5900
 
 ENV DEBIAN_FRONTEND noninteractive
-RUN echo "debconf shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections
-RUN echo "debconf shared/accepted-oracle-license-v1-1 seen true" | debconf-set-selections
+RUN echo "debconf shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections && \
+    echo "debconf shared/accepted-oracle-license-v1-1 seen true" | debconf-set-selections
 
 # Update packages
-RUN apt-get -y update
-
-# First, install add-apt-repository, sshd and bzip2
-RUN apt-get -y install software-properties-common bzip2 ssh net-tools
-
-# Add oracle-jdk7 to repositories
-RUN add-apt-repository ppa:webupd8team/java
-
-# Update apt
-RUN apt-get update
-
-# Install oracle-jdk7
-RUN apt-get -y install oracle-java7-installer
+RUN apt-get -y update && \
+    apt-get -y install software-properties-common bzip2 ssh net-tools openssh-server socat curl && \
+    add-apt-repository ppa:webupd8team/java && \
+    apt-get update && \
+    apt-get -y install oracle-java7-installer && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install android sdk
-RUN wget http://dl.google.com/android/android-sdk_r23-linux.tgz
-RUN tar -xvzf android-sdk_r23-linux.tgz
-RUN mv android-sdk-linux /usr/local/android-sdk
+RUN wget -qO- http://dl.google.com/android/android-sdk_r23-linux.tgz | \
+    tar xvz -C /usr/local/ && \
+    mv /usr/local/android-sdk-linux /usr/local/android-sdk && \
+    chown -R root:root /usr/local/android-sdk/
 
 # Install apache ant
-RUN wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.8.4-bin.tar.gz
-RUN tar -xvzf apache-ant-1.8.4-bin.tar.gz
-RUN mv apache-ant-1.8.4 /usr/local/apache-ant
+RUN wget -qO- http://archive.apache.org/dist/ant/binaries/apache-ant-1.8.4-bin.tar.gz | \
+    tar xvz -C /usr/local && \
+    mv /usr/local/apache-ant-1.8.4 /usr/local/apache-ant
 
 # Add android tools and platform tools to PATH
 ENV ANDROID_HOME /usr/local/android-sdk
@@ -56,46 +50,25 @@ ENV PATH $PATH:$ANT_HOME/bin
 # Export JAVA_HOME variable
 ENV JAVA_HOME /usr/lib/jvm/java-7-oracle
 
-# Remove compressed files.
-RUN cd /; rm android-sdk_r23-linux.tgz && rm apache-ant-1.8.4-bin.tar.gz
-
-# Some preparation before update
-RUN chown -R root:root /usr/local/android-sdk/
-
 # Install latest android tools and system images
-RUN echo "y" | android update sdk --filter platform-tool --no-ui --force
-RUN echo "y" | android update sdk --filter platform --no-ui --force
-RUN echo "y" | android update sdk --filter build-tools-22.0.1 --no-ui -a
-RUN echo "y" | android update sdk --filter sys-img-x86-android-19 --no-ui -a
-RUN echo "y" | android update sdk --filter sys-img-x86-android-21 --no-ui -a
-RUN echo "y" | android update sdk --filter sys-img-x86-android-22 --no-ui -a
-RUN echo "y" | android update sdk --filter sys-img-armeabi-v7a-android-19 --no-ui -a
-RUN echo "y" | android update sdk --filter sys-img-armeabi-v7a-android-21 --no-ui -a
-RUN echo "y" | android update sdk --filter sys-img-armeabi-v7a-android-22 --no-ui -a
-
-# Update ADB
-RUN echo "y" | android update adb
+RUN ( sleep 4 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --no-ui --force -a --filter \
+    platform-tool,android-19,android-21,android-22,build-tools-22.0.1,sys-img-x86-android-19,sys-img-x86-android-21,sys-img-x86-android-22,sys-img-armeabi-v7a-android-19,sys-img-armeabi-v7a-android-21,sys-img-armeabi-v7a-android-22 && \
+    echo "y" | android update adb
 
 # Create fake keymap file
-RUN mkdir /usr/local/android-sdk/tools/keymaps
-RUN touch /usr/local/android-sdk/tools/keymaps/en-us
+RUN mkdir /usr/local/android-sdk/tools/keymaps && \
+    touch /usr/local/android-sdk/tools/keymaps/en-us
 
 # Run sshd
-RUN apt-get install -y openssh-server
-RUN mkdir /var/run/sshd
-RUN echo "root:$ROOTPASSWORD" | chpasswd
-RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-# SSH login fix. Otherwise user is kicked off after login
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+RUN mkdir /var/run/sshd && \
+    echo "root:$ROOTPASSWORD" | chpasswd && \
+    sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
+    echo "export VISIBLE=now" >> /etc/profile
 
 ENV NOTVISIBLE "in users profile"
-RUN echo "export VISIBLE=now" >> /etc/profile
 
-# Install socat
-RUN apt-get install -y socat
-
-# Add entrypoint 
+# Add entrypoint
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
