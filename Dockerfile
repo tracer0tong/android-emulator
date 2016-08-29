@@ -62,7 +62,7 @@ RUN mkdir /usr/local/android-sdk/tools/keymaps && \
 # Run sshd
 RUN mkdir /var/run/sshd && \
     echo "root:$ROOTPASSWORD" | chpasswd && \
-    sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
     echo "export VISIBLE=now" >> /etc/profile
 
