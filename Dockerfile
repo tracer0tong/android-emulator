@@ -21,7 +21,7 @@ RUN echo "debconf shared/accepted-oracle-license-v1-1 select true" | debconf-set
 
 # Update packages
 RUN apt-get -y update && \
-    apt-get -y install software-properties-common bzip2 ssh net-tools openssh-server socat curl && \
+    apt-get -y install software-properties-common bzip2 net-tools socat curl && \
     add-apt-repository ppa:webupd8team/java && \
     apt-get update && \
     apt-get -y install oracle-java7-installer && \
@@ -49,15 +49,6 @@ RUN ( sleep 4 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --
 # Create fake keymap file
 RUN mkdir /usr/local/android-sdk/tools/keymaps && \
     touch /usr/local/android-sdk/tools/keymaps/en-us
-
-# Run sshd
-RUN mkdir /var/run/sshd && \
-    echo "root:$ROOTPASSWORD" | chpasswd && \
-    sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
-    echo "export VISIBLE=now" >> /etc/profile
-
-ENV NOTVISIBLE "in users profile"
 
 # Add entrypoint
 ADD entrypoint.sh /entrypoint.sh
