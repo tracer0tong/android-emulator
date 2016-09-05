@@ -33,19 +33,10 @@ RUN wget -qO- http://dl.google.com/android/android-sdk_r23-linux.tgz | \
     mv /usr/local/android-sdk-linux /usr/local/android-sdk && \
     chown -R root:root /usr/local/android-sdk/
 
-# Install apache ant
-RUN wget -qO- http://archive.apache.org/dist/ant/binaries/apache-ant-1.8.4-bin.tar.gz | \
-    tar xvz -C /usr/local && \
-    mv /usr/local/apache-ant-1.8.4 /usr/local/apache-ant
-
 # Add android tools and platform tools to PATH
 ENV ANDROID_HOME /usr/local/android-sdk
 ENV PATH $PATH:$ANDROID_HOME/tools
 ENV PATH $PATH:$ANDROID_HOME/platform-tools
-
-# Add ant to PATH
-ENV ANT_HOME /usr/local/apache-ant
-ENV PATH $PATH:$ANT_HOME/bin
 
 # Export JAVA_HOME variable
 ENV JAVA_HOME /usr/lib/jvm/java-7-oracle
