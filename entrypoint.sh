@@ -17,7 +17,6 @@ fi
 
 # Run sshd
 /usr/sbin/sshd
-adb start-server
 
 # Detect ip and forward ADB ports outside to outside interface
 ip=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
