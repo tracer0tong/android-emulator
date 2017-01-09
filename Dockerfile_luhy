@@ -1,0 +1,10 @@
+FROM tracer0tong/android-emulator
+
+RUN apt-get update 
+RUN apt-get install -y libnss3 libnss3-dev libdbus-1-dev gconf-service\		
+			libfontconfig1 libpango1.0-0 \
+			libasound2 x11vnc libatk1.0-0 libcupsfilters1 libgtk2.0-0 
+
+ADD entrypoint_luhy.sh /entrypoint_luhy.sh
+RUN chmod +x /entrypoint_luhy.sh
+ENTRYPOINT ["/entrypoint_luhy.sh"]
