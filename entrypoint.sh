@@ -23,6 +23,8 @@ ip=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ p
 socat tcp-listen:5037,bind=$ip,fork tcp:127.0.0.1:5037 &
 socat tcp-listen:5554,bind=$ip,fork tcp:127.0.0.1:5554 &
 socat tcp-listen:5555,bind=$ip,fork tcp:127.0.0.1:5555 &
+socat tcp-listen:80,bind=$ip,fork tcp:127.0.0.1:80 &
+socat tcp-listen:443,bind=$ip,fork tcp:127.0.0.1:443 &
 
 # Set up and run emulator
 if [[ $ARCH == *"x86"* ]]

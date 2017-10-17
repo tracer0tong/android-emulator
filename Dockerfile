@@ -14,6 +14,8 @@ EXPOSE 5037
 EXPOSE 5554
 EXPOSE 5555
 EXPOSE 5900
+EXPOSE 80
+EXPOSE 443
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN echo "debconf shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections && \
@@ -24,7 +26,7 @@ RUN apt-get -y update && \
     apt-get -y install software-properties-common bzip2 ssh net-tools openssh-server socat curl && \
     add-apt-repository ppa:webupd8team/java && \
     apt-get update && \
-    apt-get -y install oracle-java7-installer && \
+    apt-get -y install oracle-java8-installer && \
     rm -rf /var/lib/apt/lists/*
 
 # Install android sdk
