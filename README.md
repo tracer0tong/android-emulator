@@ -1,5 +1,7 @@
 # Android-emulator
 
+## ATTENTION: I'm not actively supporting that project, because of a shift in my personal interests. If you want to propose improvement, I can accept it as pull-request.
+
 Thanks to @nightscape for nice optimizations!
 
 Android-emulator is yet another Docker image with Android SDK and emulator inside (based on tons of other works).
